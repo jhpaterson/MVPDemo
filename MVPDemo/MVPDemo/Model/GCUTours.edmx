@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="gcutourswmModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.4.0" ProviderManifestToken="4.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="gcutourswmModelStoreContainer">
+          <EntitySet Name="Bookings" EntityType="gcutourswmModel.Store.Bookings" store:Type="Tables" />
+          <EntitySet Name="MailingLists" EntityType="gcutourswmModel.Store.MailingLists" store:Type="Tables" />
+          <EntitySet Name="Packages" EntityType="gcutourswmModel.Store.Packages" store:Type="Tables" />
+          <EntitySet Name="Subscriptions" EntityType="gcutourswmModel.Store.Subscriptions" store:Type="Tables" />
+          <EntitySet Name="Tours" EntityType="gcutourswmModel.Store.Tours" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="gcutourswmModel.Store.Users" store:Type="Tables" />
+          <AssociationSet Name="FK__Tours__Packages" Association="gcutourswmModel.Store.FK__Tours__Packages">
+            <End Role="Packages" EntitySet="Packages" />
+            <End Role="Tours" EntitySet="Tours" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bookings_Tours" Association="gcutourswmModel.Store.FK_Bookings_Tours">
+            <End Role="Tours" EntitySet="Tours" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bookings_Users" Association="gcutourswmModel.Store.FK_Bookings_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_MailingLists" Association="gcutourswmModel.Store.FK_Subscriptions_MailingLists">
+            <End Role="MailingLists" EntitySet="MailingLists" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Users" Association="gcutourswmModel.Store.FK_Subscriptions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Bookings">
+          <Key>
+            <PropertyRef Name="bookingID" />
+          </Key>
+          <Property Name="bookingID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="tourID" Type="int" />
+          <Property Name="username" Type="nvarchar" MaxLength="10" />
+          <Property Name="adults" Type="int" />
+          <Property Name="children" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="MailingLists">
+          <Key>
+            <PropertyRef Name="mailinglistID" />
+          </Key>
+          <Property Name="mailinglistID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Packages">
+          <Key>
+            <PropertyRef Name="packageID" />
+          </Key>
+          <Property Name="packageID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="location" Type="nvarchar" MaxLength="50" />
+          <Property Name="packagename" Type="nvarchar" MaxLength="50" />
+          <Property Name="description" Type="ntext" />
+          <Property Name="adultprice" Type="money" />
+          <Property Name="childprice" Type="money" />
+          <Property Name="departure" Type="nvarchar" MaxLength="50" />
+          <Property Name="sales" Type="int" />
+          <Property Name="tourpicurl" Type="nvarchar" MaxLength="255" />
+          <Property Name="tourvidurl" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Subscriptions">
+          <Key>
+            <PropertyRef Name="username" />
+            <PropertyRef Name="mailinglistID" />
+          </Key>
+          <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="mailinglistID" Type="int" Nullable="false" />
+          <Property Name="subscriptiondate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Tours">
+          <Key>
+            <PropertyRef Name="tourID" />
+          </Key>
+          <Property Name="tourID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="departuredate" Type="datetime" />
+          <Property Name="offer" Type="numeric" />
+          <Property Name="packageID" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="firstname" Type="nvarchar" MaxLength="25" />
+          <Property Name="lastname" Type="nvarchar" MaxLength="40" />
+          <Property Name="address" Type="nvarchar" MaxLength="50" />
+          <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="password" Type="nvarchar" MaxLength="10" />
+          <Property Name="datejoined" Type="datetime" />
+        </EntityType>
+        <Association Name="FK__Tours__Packages">
+          <End Role="Packages" Type="gcutourswmModel.Store.Packages" Multiplicity="0..1" />
+          <End Role="Tours" Type="gcutourswmModel.Store.Tours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Packages">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="Tours">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bookings_Tours">
+          <End Role="Tours" Type="gcutourswmModel.Store.Tours" Multiplicity="0..1" />
+          <End Role="Bookings" Type="gcutourswmModel.Store.Bookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tours">
+              <PropertyRef Name="tourID" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="tourID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bookings_Users">
+          <End Role="Users" Type="gcutourswmModel.Store.Users" Multiplicity="0..1" />
+          <End Role="Bookings" Type="gcutourswmModel.Store.Bookings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_MailingLists">
+          <End Role="MailingLists" Type="gcutourswmModel.Store.MailingLists" Multiplicity="1" />
+          <End Role="Subscriptions" Type="gcutourswmModel.Store.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailingLists">
+              <PropertyRef Name="mailinglistID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="mailinglistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Users">
+          <End Role="Users" Type="gcutourswmModel.Store.Users" Multiplicity="1" />
+          <End Role="Subscriptions" Type="gcutourswmModel.Store.Subscriptions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gcutourswmModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="gcutoursEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bookings" EntityType="gcutourswmModel.Booking" />
+          <EntitySet Name="MailingLists" EntityType="gcutourswmModel.MailingList" />
+          <EntitySet Name="Packages" EntityType="gcutourswmModel.Package" />
+          <EntitySet Name="Subscriptions" EntityType="gcutourswmModel.Subscription" />
+          <EntitySet Name="Tours" EntityType="gcutourswmModel.Tour" />
+          <EntitySet Name="Users" EntityType="gcutourswmModel.User" />
+          <AssociationSet Name="FK_Bookings_Tours" Association="gcutourswmModel.FK_Bookings_Tours">
+            <End Role="Tours" EntitySet="Tours" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bookings_Users" Association="gcutourswmModel.FK_Bookings_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Bookings" EntitySet="Bookings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_MailingLists" Association="gcutourswmModel.FK_Subscriptions_MailingLists">
+            <End Role="MailingLists" EntitySet="MailingLists" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Tours__Packages" Association="gcutourswmModel.FK__Tours__Packages">
+            <End Role="Packages" EntitySet="Packages" />
+            <End Role="Tours" EntitySet="Tours" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subscriptions_Users" Association="gcutourswmModel.FK_Subscriptions_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Subscriptions" EntitySet="Subscriptions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Booking">
+          <Key>
+            <PropertyRef Name="bookingID" />
+          </Key>
+          <Property Name="bookingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tourID" Type="Int32" />
+          <Property Name="username" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="adults" Type="Int32" />
+          <Property Name="children" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Tour" Relationship="gcutourswmModel.FK_Bookings_Tours" FromRole="Bookings" ToRole="Tours" />
+          <NavigationProperty Name="User" Relationship="gcutourswmModel.FK_Bookings_Users" FromRole="Bookings" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="MailingList">
+          <Key>
+            <PropertyRef Name="mailinglistID" />
+          </Key>
+          <Property Name="mailinglistID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Subscriptions" Relationship="gcutourswmModel.FK_Subscriptions_MailingLists" FromRole="MailingLists" ToRole="Subscriptions" />
+        </EntityType>
+        <EntityType Name="Package">
+          <Key>
+            <PropertyRef Name="packageID" />
+          </Key>
+          <Property Name="packageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="location" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="packagename" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="adultprice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="childprice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="departure" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="sales" Type="Int32" />
+          <Property Name="tourpicurl" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="tourvidurl" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Tours" Relationship="gcutourswmModel.FK__Tours__Packages" FromRole="Packages" ToRole="Tours" />
+        </EntityType>
+        <EntityType Name="Subscription">
+          <Key>
+            <PropertyRef Name="username" />
+            <PropertyRef Name="mailinglistID" />
+          </Key>
+          <Property Name="username" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="mailinglistID" Type="Int32" Nullable="false" />
+          <Property Name="subscriptiondate" Type="DateTime" />
+          <NavigationProperty Name="MailingList" Relationship="gcutourswmModel.FK_Subscriptions_MailingLists" FromRole="Subscriptions" ToRole="MailingLists" />
+          <NavigationProperty Name="User" Relationship="gcutourswmModel.FK_Subscriptions_Users" FromRole="Subscriptions" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Tour">
+          <Key>
+            <PropertyRef Name="tourID" />
+          </Key>
+          <Property Name="tourID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="departuredate" Type="DateTime" />
+          <Property Name="offer" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="packageID" Type="Int32" />
+          <NavigationProperty Name="Bookings" Relationship="gcutourswmModel.FK_Bookings_Tours" FromRole="Tours" ToRole="Bookings" />
+          <NavigationProperty Name="Package" Relationship="gcutourswmModel.FK__Tours__Packages" FromRole="Tours" ToRole="Packages" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="firstname" Type="String" MaxLength="25" Unicode="true" FixedLength="false" />
+          <Property Name="lastname" Type="String" MaxLength="40" Unicode="true" FixedLength="false" />
+          <Property Name="address" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="username" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="password" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="datejoined" Type="DateTime" />
+          <NavigationProperty Name="Bookings" Relationship="gcutourswmModel.FK_Bookings_Users" FromRole="Users" ToRole="Bookings" />
+          <NavigationProperty Name="Subscriptions" Relationship="gcutourswmModel.FK_Subscriptions_Users" FromRole="Users" ToRole="Subscriptions" />
+        </EntityType>
+        <Association Name="FK_Bookings_Tours">
+          <End Role="Tours" Type="gcutourswmModel.Tour" Multiplicity="0..1" />
+          <End Role="Bookings" Type="gcutourswmModel.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tours">
+              <PropertyRef Name="tourID" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="tourID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bookings_Users">
+          <End Role="Users" Type="gcutourswmModel.User" Multiplicity="0..1" />
+          <End Role="Bookings" Type="gcutourswmModel.Booking" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="Bookings">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_MailingLists">
+          <End Role="MailingLists" Type="gcutourswmModel.MailingList" Multiplicity="1" />
+          <End Role="Subscriptions" Type="gcutourswmModel.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MailingLists">
+              <PropertyRef Name="mailinglistID" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="mailinglistID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Tours__Packages">
+          <End Role="Packages" Type="gcutourswmModel.Package" Multiplicity="0..1" />
+          <End Role="Tours" Type="gcutourswmModel.Tour" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Packages">
+              <PropertyRef Name="packageID" />
+            </Principal>
+            <Dependent Role="Tours">
+              <PropertyRef Name="packageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subscriptions_Users">
+          <End Role="Users" Type="gcutourswmModel.User" Multiplicity="1" />
+          <End Role="Subscriptions" Type="gcutourswmModel.Subscription" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="username" />
+            </Principal>
+            <Dependent Role="Subscriptions">
+              <PropertyRef Name="username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gcutourswmModelStoreContainer" CdmEntityContainer="gcutoursEntities">
+          <EntitySetMapping Name="Bookings"><EntityTypeMapping TypeName="gcutourswmModel.Booking"><MappingFragment StoreEntitySet="Bookings">
+            <ScalarProperty Name="bookingID" ColumnName="bookingID" />
+            <ScalarProperty Name="tourID" ColumnName="tourID" />
+            <ScalarProperty Name="username" ColumnName="username" />
+            <ScalarProperty Name="adults" ColumnName="adults" />
+            <ScalarProperty Name="children" ColumnName="children" />
+            <ScalarProperty Name="status" ColumnName="status" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="MailingLists"><EntityTypeMapping TypeName="gcutourswmModel.MailingList"><MappingFragment StoreEntitySet="MailingLists">
+            <ScalarProperty Name="mailinglistID" ColumnName="mailinglistID" />
+            <ScalarProperty Name="title" ColumnName="title" />
+            <ScalarProperty Name="description" ColumnName="description" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Packages"><EntityTypeMapping TypeName="gcutourswmModel.Package"><MappingFragment StoreEntitySet="Packages">
+            <ScalarProperty Name="packageID" ColumnName="packageID" />
+            <ScalarProperty Name="location" ColumnName="location" />
+            <ScalarProperty Name="packagename" ColumnName="packagename" />
+            <ScalarProperty Name="description" ColumnName="description" />
+            <ScalarProperty Name="adultprice" ColumnName="adultprice" />
+            <ScalarProperty Name="childprice" ColumnName="childprice" />
+            <ScalarProperty Name="departure" ColumnName="departure" />
+            <ScalarProperty Name="sales" ColumnName="sales" />
+            <ScalarProperty Name="tourpicurl" ColumnName="tourpicurl" />
+            <ScalarProperty Name="tourvidurl" ColumnName="tourvidurl" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Subscriptions"><EntityTypeMapping TypeName="gcutourswmModel.Subscription"><MappingFragment StoreEntitySet="Subscriptions">
+            <ScalarProperty Name="username" ColumnName="username" />
+            <ScalarProperty Name="mailinglistID" ColumnName="mailinglistID" />
+            <ScalarProperty Name="subscriptiondate" ColumnName="subscriptiondate" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Tours"><EntityTypeMapping TypeName="gcutourswmModel.Tour"><MappingFragment StoreEntitySet="Tours">
+            <ScalarProperty Name="tourID" ColumnName="tourID" />
+            <ScalarProperty Name="departuredate" ColumnName="departuredate" />
+            <ScalarProperty Name="offer" ColumnName="offer" />
+            <ScalarProperty Name="packageID" ColumnName="packageID" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Users"><EntityTypeMapping TypeName="gcutourswmModel.User"><MappingFragment StoreEntitySet="Users">
+            <ScalarProperty Name="firstname" ColumnName="firstname" />
+            <ScalarProperty Name="lastname" ColumnName="lastname" />
+            <ScalarProperty Name="address" ColumnName="address" />
+            <ScalarProperty Name="username" ColumnName="username" />
+            <ScalarProperty Name="password" ColumnName="password" />
+            <ScalarProperty Name="datejoined" ColumnName="datejoined" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="GCUTours" ZoomLevel="55">
+        <EntityTypeShape EntityType="gcutourswmModel.Booking" Width="1.5" PointX="3" PointY="3.5" Height="2.5571907552083335" IsExpanded="true" />
+        <EntityTypeShape EntityType="gcutourswmModel.MailingList" Width="1.5" PointX="0.75" PointY="7.25" Height="1.7879850260416665" IsExpanded="true" />
+        <EntityTypeShape EntityType="gcutourswmModel.Package" Width="1.5" PointX="4.75" PointY="7.125" Height="3.1340950520833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="gcutourswmModel.Subscription" Width="1.5" PointX="3" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="gcutourswmModel.Tour" Width="1.5" PointX="7.375" PointY="4.25" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="gcutourswmModel.User" Width="1.5" PointX="0.75" PointY="3.5" Height="2.5571907552083322" IsExpanded="true" />
+        <AssociationConnector Association="gcutourswmModel.FK_Bookings_Tours" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.375" PointY="5.1535953776041667" />
+          <ConnectorPoint PointX="4.5" PointY="5.1535953776041667" />
+        </AssociationConnector>
+        <AssociationConnector Association="gcutourswmModel.FK_Bookings_Users" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.7785953776041659" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="4.778595377604165" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="4.7785953776041659" />
+          <ConnectorPoint PointX="3" PointY="4.7785953776041659" />
+        </AssociationConnector>
+        <AssociationConnector Association="gcutourswmModel.FK_Subscriptions_MailingLists" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="7.25" />
+          <ConnectorPoint PointX="2.625" PointY="6.875" />
+          <ConnectorPoint PointX="2.625" PointY="1.7401432291666668" />
+          <ConnectorPoint PointX="3" PointY="1.7401432291666668" />
+        </AssociationConnector>
+        <AssociationConnector Association="gcutourswmModel.FK__Tours__Packages" ManuallyRouted="false">
+          <ConnectorPoint PointX="5.5" PointY="7.125" />
+          <ConnectorPoint PointX="5.5" PointY="5.8193441341145835" />
+          <ConnectorPoint PointX="7.375" PointY="5.8193441341145835" />
+        </AssociationConnector>
+        <AssociationConnector Association="gcutourswmModel.FK_Subscriptions_Users" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.5" PointY="3.5" />
+          <ConnectorPoint PointX="1.5" PointY="2.2664673437500009" />
+          <ConnectorPoint PointX="2.5416666666666665" PointY="2.2664673437500005" />
+          <ConnectorPoint PointX="2.7083333333333335" PointY="2.2664673437500009" />
+          <ConnectorPoint PointX="3" PointY="2.2664673437500009" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
